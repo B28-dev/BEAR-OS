@@ -7,14 +7,45 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
+        :root {
+            --primary-bg: #0c0c1e;
+            --secondary-bg: #16213e;
+            --accent-cyan: #00ffff;
+            --accent-magenta: #ff00ff;
+        }
+
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #0c0c1e;
-            color: #00ffff;
+            background-color: var(--primary-bg);
+            color: var(--accent-cyan);
             font-family: 'VT323', monospace;
             overflow: hidden;
+        }
+
+        .shader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: 
+                linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 255, 255, 0.05),
+                    rgba(0, 255, 255, 0.05) 1px,
+                    transparent 1px,
+                    transparent 2px
+                );
+            opacity: 0.5;
+            z-index: 1000;
+        }
+
+        #login-container, #loading-screen, #terminal {
+            position: relative;
         }
 
         #login-container {
@@ -22,7 +53,60 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #1a1a2e, var(--secondary-bg));
+        }
+
+        .login-box {
+            background-color: var(--secondary-bg);
+            border: 2px solid #0f3460;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            width: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f3460;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none ;
+            border-color: var(--accent-magenta);
+            box-shadow: 0 0 0px rgba(0, 255, 255, 0.5);
+        }
+
+        button {
+            background-color: var(--accent-cyan);
+            color: var(--primary-bg);
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'VT323', monospace;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background-color: var(--accent-magenta);
         }
 
         #loading-screen {
@@ -32,87 +116,110 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #0c0c1e;
+            background-color: var(--primary-bg);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 255, 255, 0.05) 25%, rgba(0, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 255, 0.05) 75%, rgba(0, 255, 255, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        .loading-circuit {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 255, 0.1),
+                rgba(0, 255, 255, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            animation: circuit-move 10s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes circuit-move {
+            0% { transform: rotate(0deg) scale(0.5); }
+            100% { transform: rotate(360deg) scale(0.5); }
         }
 
         .loading-animation {
-            width: 50px;
-            height: 50px;
-            border: 3px solid transparent;
-            border-top: 3px solid #00ffff;
+            width: 100px;
+            height: 100px;
+            border: 5px solid transparent;
+            border-top: 5px solid var(--accent-cyan);
+            border-right: 5px solid var(--accent-magenta);
+            border-bottom: 5px solid var(--accent-cyan);
+            border-left: 5px solid var(--accent-magenta);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
         }
 
         #loading-text {
-            color: #00ffff;
+            color: var(--accent-cyan);
             font-size: 24px;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+        }
+
+        .loading-details {
+            color: var(--accent-magenta);
+            font-size: 18px;
+            margin-top: 10px;
+            opacity: 0.7;
+        }
+
+        @keyframes text-glitch {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+            5% { clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 90%); }
+            10% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+            15% { clip-path: polygon(0 5%, 100% 0, 100% 100%, 0% 95%); }
+            20% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%); }
+        }
+
+        .glitch-text {
+            animation: text-glitch 0.5s infinite alternate;
         }
 
         #terminal {
             display: none;
             width: 100%;
             height: 100vh;
-            background-color: #0c0c1e;
+            background-color: var(--primary-bg);
             padding: 20px;
             box-sizing: border-box;
             overflow-y: auto;
         }
 
-        .login-box {
-            background-color: #16213e;
-            border: 2px solid #0f3460;
-            border-radius: 10px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
-            width: 300px;
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #0f3460;
-            border: 1px solid #00ffff;
-            color: #00ffff;
-            font-family: 'VT323', monospace;
-            font-size: 18px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #00ffff;
-            color: #0c0c1e;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-family: 'VT323', monospace;
-            font-size: 18px;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #1de5e2;
-        }
-
         #command-line {
             width: 100%;
             padding: 10px;
-            background-color: #0c0c1e;
+            background-color: var(--primary-bg);
             border: none;
-            color: #00ffff;
+            border-bottom: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
             font-family: 'VT323', monospace;
             font-size: 18px;
             outline: none;
@@ -122,43 +229,52 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             margin-bottom: 20px;
+            color: var(--accent-cyan);
         }
 
         .glitch {
             position: relative;
             text-shadow: 
-                -2px 0 #00ffff,
-                2px 0 #ff00ff,
-                0 -2px #00ffff,
-                0 2px #ff00ff;
+                -1px 0 var(--accent-cyan),
+                1px 0 var(--accent-magenta),
+                0 -1px var(--accent-cyan),
+                0 1px var(--accent-magenta);
         }
 
         @keyframes glitch {
             0% {
                 text-shadow: 
-                    -1px 0 #00ffff,
-                    1px 0 #ff00ff;
+                    -1px 0 var(--accent-cyan),
+                    1px 0 var(--accent-magenta);
             }
             100% {
                 text-shadow: 
-                    -3px 0 #00ffff,
-                    3px 0 #ff00ff;
+                    -3px 0 var(--accent-cyan),
+                    3px 0 var(--accent-magenta);
             }
         }
     </style>
 </head>
 <body>
+    <div class="shader-overlay"></div>
+
     <div id="login-container">
         <div class="login-box">
             <h1 class="glitch">BEAR-OS</h1>
-            <input type="password" id="password" placeholder="Enter Login">
+            <div class="input-wrapper">
+                <input type="password" id="password" placeholder="Enter Login">
+            </div>
             <button onclick="login()">Enter</button>
         </div>
     </div>
 
     <div id="loading-screen">
+        <div class="grid-overlay"></div>
+        <div class="loading-circuit"></div>
         <div class="loading-animation"></div>
-        <div id="loading-text">Initializing BEAR-OS...</div>
+        <div id="loading-text" class="glitch-text">Initializing BEAR-OS...</div>
+        <div class="loading-details">Quantum Encryption Activated</div>
+        <div class="loading-details">Neural Networks Booting</div>
     </div>
 
     <div id="terminal">
@@ -173,13 +289,17 @@ Available Commands:
 - about : Learn about BEAR-OS
 - contact : Get contact information
 - projects : View current projects
+- time : View current time
+- roll : Roll a die/dice with any amount off sides
+- flip : Flip a coin
+- cipher : Cipher an input text
+- base64 : encode/decode to/from base64
 - clear : Clear the terminal screen
 - exit : Return to login screen
             `,
             'about': () => `
-BEAR-OS v0.1 
-Basic Emergency, Assistance and Rescue Operating System
-BlackBear28's personalised operating system
+BEAR-OS v0.3 
+BlackBear's Emergency, Assistance and Rescue Operating System
 Created with caffeine and hallucinations
 Developed by BlackBear28
             `,
@@ -193,8 +313,59 @@ Current BEAR-OS Projects:
 1. Bear-OS
 2. Bear-AI
 3. CK-JLK3
-4. Loannis Dating Simulator 2
+4. LDS2
             `,
+            'ck-jlk3': () => `
+This is not a real thing, don't get too exited
+            `,
+            'bear-os': () => `
+Basic Emergency, Assistance and Rescue Operating System
+BlackBear28's personalised operating system
+Created with caffeine and hallucinations
+Developed by BlackBear28
+            `,
+            'lds2': () => `
+Loannis Dating Simulator 2
+Probably the weirdest dating simulator to ever exist
+            `,
+            'bear-ai': () => `
+BEAR-AI
+Not yet in development, an AI for BlackBear28's personal use
+            `,
+            'time': () => {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString();
+        const dateString = now.toLocaleDateString();
+        return `Current Time: ${timeString}\nCurrent Date: ${dateString}`;
+    },
+            'roll': (input) => {
+    const sides = parseInt(input) || 6; // Default to 6-sided die
+    if (sides <= 1) return "Number of sides must be greater than 1.";
+    return `You rolled a ${Math.floor(Math.random() * sides) + 1} (1-${sides})`;
+},
+            'flip': () => {
+    return Math.random() < 0.5 ? "Heads" : "Tails";
+},
+            'cipher': (input) => {
+    const [shift, ...textArr] = input.split(' ');
+    const text = textArr.join(' ');
+    const shiftValue = parseInt(shift, 10);
+    if (isNaN(shiftValue) || !text) return "Usage: cipher shift text";
+    return text.replace(/[a-zA-Z]/g, char => {
+        const offset = char.toLowerCase() === char ? 97 : 65;
+        return String.fromCharCode(((char.charCodeAt(0) - offset + shiftValue) % 26) + offset);
+    });
+},
+            'base64': (input) => {
+    const [action, ...textArr] = input.split(' ');
+    const text = textArr.join(' ');
+    if (!action || !text) return "Usage: base64 encode/decode text";
+    return action === 'encode'
+        ? `Encoded: ${btoa(text)}`
+        : action === 'decode'
+        ? `Decoded: ${atob(text)}`
+        : "Invalid option. Use 'encode' or 'decode'.";
+},
             'exit': () => {
                 document.getElementById('terminal').style.display = 'none';
                 document.getElementById('login-container').style.display = 'flex';
@@ -204,11 +375,24 @@ Current BEAR-OS Projects:
 
         function login() {
             const password = document.getElementById('password').value;
-            if (password === '18590000') {
+            if (password === 'beartech2024') {
                 document.getElementById('login-container').style.display = 'none';
                 document.getElementById('loading-screen').style.display = 'flex';
 
-                // Simulate loading process
+                // More dynamic loading simulation
+                const loadingDetails = document.querySelectorAll('.loading-details');
+                loadingDetails[0].textContent = 'Quantum Encryption Activated...';
+                
+                setTimeout(() => {
+                    loadingDetails[1].textContent = 'Neural Networks Booting...';
+                }, 500);
+
+                setTimeout(() => {
+                    loadingDetails[0].textContent = 'Systems Synchronizing...';
+                    loadingDetails[1].textContent = 'Initializing Vaporwave Interface...';
+                }, 1000);
+
+                // Final transition
                 setTimeout(() => {
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('terminal').style.display = 'block';
@@ -219,24 +403,30 @@ Current BEAR-OS Projects:
             }
         }
 
-        document.getElementById('command-line').addEventListener('keypress', function(e) {
+        document.getElementById('command-line').addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                const command = this.value.toLowerCase().trim();
-                const output = document.getElementById('output');
-                const commandFunc = commands[command];
+            const commandLine = this.value.trim();
+            const [command, ...args] = commandLine.split(' '); // Split command and arguments
+            const output = document.getElementById('output');
+            const commandFunc = commands[command.toLowerCase()];
 
-                if (commandFunc) {
-                    output.innerHTML += `> ${command}\n${commandFunc()}\n\n`;
-                } else if (command === 'clear') {
-                    output.innerHTML = '';
-                } else {
-                    output.innerHTML += `> ${command}\nCommand not found. Type 'help' for available commands.\n\n`;
+            if (commandFunc) {
+                try {
+                    output.innerHTML += `> ${commandLine}\n${commandFunc(args.join(' '))}\n\n`;
+                } catch (err) {
+                    output.innerHTML += `> ${commandLine}\nError: ${err.message}\n\n`;
                 }
-
-                this.value = '';
-                output.scrollTop = output.scrollHeight;
+            } else if (command === 'clear') {
+                output.innerHTML = ''; // Clear the terminal output
+            } else {
+                output.innerHTML += `> ${commandLine}\nCommand not found. Type 'help' for available commands.\n\n`;
             }
-        });
+
+            this.value = '';
+            output.scrollTop = output.scrollHeight; // Scroll to the bottom
+        }
+    });
+
     </script>
 </body>
 </html>
