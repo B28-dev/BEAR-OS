@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>BEAR-OS</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         
@@ -23,6 +24,14 @@
             font-family: 'VT323', monospace;
             overflow: hidden;
         }
+        @media (max-width: 600px) {
+    .shader-overlay {
+        background-size: 20px 20px; /* Smaller grid pattern */
+    }
+    .grid-overlay {
+        background-size: 30px 30px; /* Reduce grid size */
+    }
+}
 
         .shader-overlay {
             position: fixed;
@@ -47,6 +56,13 @@
         #login-container, #loading-screen, #terminal {
             position: relative;
         }
+        #login-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Add padding for small screens */
+}
 
         #login-container {
             display: flex;
@@ -55,7 +71,12 @@
             height: 100vh;
             background: linear-gradient(135deg, #1a1a2e, var(--secondary-bg));
         }
-
+        @media (max-width: 600px) {
+    .login-box {
+        width: 90%; /* Adjust width */
+        padding: 20px; /* Reduce padding */
+    }
+}
         .login-box {
             background-color: var(--secondary-bg);
             border: 2px solid #0f3460;
@@ -157,6 +178,19 @@
             0% { transform: rotate(0deg) scale(0.5); }
             100% { transform: rotate(360deg) scale(0.5); }
         }
+        @media (max-width: 600px) {
+    .loading-animation {
+        width: 70px;
+        height: 70px;
+        border-width: 3px;
+    }
+    #loading-text {
+        font-size: 18px; /* Smaller text */
+    }
+    .loading-details {
+        font-size: 14px; /* Smaller text */
+    }
+}
 
         .loading-animation {
             width: 100px;
@@ -202,6 +236,16 @@
         .glitch-text {
             animation: text-glitch 0.5s infinite alternate;
         }
+        @media (max-width: 600px) {
+    #terminal {
+        padding: 10px; /* Reduce padding */
+        font-size: 16px; /* Adjust font size */
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+    #command-line {
+        font-size: 16px; /* Match the reduced font size */
+    }
+}
 
         #terminal {
             display: none;
